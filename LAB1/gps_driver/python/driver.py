@@ -5,7 +5,7 @@ import utm
 import serial
 import sys
 from std_msgs.msg import Header
-from gps_driver.msg import GPSInfo
+from gps_driver.msg import gps_msg
 
 
 rospy.init_node('gps_node')
@@ -56,7 +56,7 @@ def gps_driver():
    port = rospy.get_param('~port',arguments[1])
    baud_rate = rospy.get_param('~baudrate',4800)
    gps_serial =initialize_serial(port,baud_rate)
-   pub = rospy.Publisher('/gps', GPSInfo, queue_size=10)
+   pub = rospy.Publisher('/gps', gps_msg, queue_size=10)
 
    while not rospy.is_shutdown():
        raw_data = gps_serial.readline()
@@ -65,7 +65,7 @@ def gps_driver():
        rospy.loginfo("Received data: %s", gps_data)
        parsed_data =parse_gps_data(gps_data)
        
-       msg = GPSInfo()
+       msg = gps_msg()
        if parsed_data:
            utc_secs,utc_nsecs,lat,lon,alt = parsed_data
            utm_data = utm.from_latlon(lat,lon)
