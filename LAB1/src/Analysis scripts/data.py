@@ -4,8 +4,8 @@ import numpy as np
 from bagpy import bagreader
 
 # Read the bag file
-# bag = bagreader('/home/haoxinliu/catkin_ws/src/GPS/src/data/walking_data.bag')
-bag = bagreader('/home/haoxinliu/catkin_ws/src/GPS/src/data/stationary_data.bag')
+# bag = bagreader('/home/haoxinliu/catkin_ws/src/LAB1/src/data/walking_data.bag')
+bag = bagreader('/home/haoxinliu/catkin_ws/src/LAB1/src/data/stationary_data.bag')
 # Get the data for the /gps_data topic
 data_path = bag.message_by_topic('/gps_data')
 if data_path:
