@@ -1,0 +1,3 @@
+A complete Ubuntu 20.04 LTS install
+You are (obviously!) up on Git
+I have experienced ups and downs in my life in just 5 years, and I believe that I can write an autobiography based on these five years of experience.
