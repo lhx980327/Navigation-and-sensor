@@ -27,8 +27,8 @@ struct gps_msg_
   gps_msg_()
     : header()
     , Latitude(0.0)
+    , Longitude(0.0)
     , UTM_northing(0.0)
-    , Longtitude(0.0)
     , UTM_easting(0.0)
     , Altitude(0.0)
     , Zone(0)
@@ -37,8 +37,8 @@ struct gps_msg_
   gps_msg_(const ContainerAllocator& _alloc)
     : header(_alloc)
     , Latitude(0.0)
+    , Longitude(0.0)
     , UTM_northing(0.0)
-    , Longtitude(0.0)
     , UTM_easting(0.0)
     , Altitude(0.0)
     , Zone(0)
@@ -54,11 +54,11 @@ struct gps_msg_
    typedef double _Latitude_type;
   _Latitude_type Latitude;
 
+   typedef double _Longitude_type;
+  _Longitude_type Longitude;
+
    typedef double _UTM_northing_type;
   _UTM_northing_type UTM_northing;
-
-   typedef double _Longtitude_type;
-  _Longtitude_type Longtitude;
 
    typedef double _UTM_easting_type;
   _UTM_easting_type UTM_easting;
@@ -103,8 +103,8 @@ bool operator==(const ::gps_driver::gps_msg_<ContainerAllocator1> & lhs, const :
 {
   return lhs.header == rhs.header &&
     lhs.Latitude == rhs.Latitude &&
+    lhs.Longitude == rhs.Longitude &&
     lhs.UTM_northing == rhs.UTM_northing &&
-    lhs.Longtitude == rhs.Longtitude &&
     lhs.UTM_easting == rhs.UTM_easting &&
     lhs.Altitude == rhs.Altitude &&
     lhs.Zone == rhs.Zone &&
@@ -165,12 +165,12 @@ struct MD5Sum< ::gps_driver::gps_msg_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "979b0376980b7c970e855bf8b0d4cbc5";
+    return "588c3c8e5e42db6a1883f51ef950f22a";
   }
 
   static const char* value(const ::gps_driver::gps_msg_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x979b0376980b7c97ULL;
-  static const uint64_t static_value2 = 0x0e855bf8b0d4cbc5ULL;
+  static const uint64_t static_value1 = 0x588c3c8e5e42db6aULL;
+  static const uint64_t static_value2 = 0x1883f51ef950f22aULL;
 };
 
 template<class ContainerAllocator>
@@ -191,12 +191,13 @@ struct Definition< ::gps_driver::gps_msg_<ContainerAllocator> >
   {
     return "Header header\n"
 "float64 Latitude\n"
+"float64 Longitude\n"
 "float64 UTM_northing\n"
-"float64 Longtitude\n"
 "float64 UTM_easting\n"
 "float64 Altitude\n"
 "int32 Zone\n"
 "string Letter\n"
+"\n"
 "\n"
 "================================================================================\n"
 "MSG: std_msgs/Header\n"
@@ -233,8 +234,8 @@ namespace serialization
     {
       stream.next(m.header);
       stream.next(m.Latitude);
+      stream.next(m.Longitude);
       stream.next(m.UTM_northing);
-      stream.next(m.Longtitude);
       stream.next(m.UTM_easting);
       stream.next(m.Altitude);
       stream.next(m.Zone);
@@ -262,10 +263,10 @@ struct Printer< ::gps_driver::gps_msg_<ContainerAllocator> >
     Printer< ::std_msgs::Header_<ContainerAllocator> >::stream(s, indent + "  ", v.header);
     s << indent << "Latitude: ";
     Printer<double>::stream(s, indent + "  ", v.Latitude);
+    s << indent << "Longitude: ";
+    Printer<double>::stream(s, indent + "  ", v.Longitude);
     s << indent << "UTM_northing: ";
     Printer<double>::stream(s, indent + "  ", v.UTM_northing);
-    s << indent << "Longtitude: ";
-    Printer<double>::stream(s, indent + "  ", v.Longtitude);
     s << indent << "UTM_easting: ";
     Printer<double>::stream(s, indent + "  ", v.UTM_easting);
     s << indent << "Altitude: ";

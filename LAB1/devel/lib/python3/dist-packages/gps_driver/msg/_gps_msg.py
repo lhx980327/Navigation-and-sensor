@@ -9,17 +9,18 @@ import struct
 import std_msgs.msg
 
 class gps_msg(genpy.Message):
-  _md5sum = "979b0376980b7c970e855bf8b0d4cbc5"
+  _md5sum = "588c3c8e5e42db6a1883f51ef950f22a"
   _type = "gps_driver/gps_msg"
   _has_header = True  # flag to mark the presence of a Header object
   _full_text = """Header header
 float64 Latitude
+float64 Longitude
 float64 UTM_northing
-float64 Longtitude
 float64 UTM_easting
 float64 Altitude
 int32 Zone
 string Letter
+
 
 ================================================================================
 MSG: std_msgs/Header
@@ -37,7 +38,7 @@ time stamp
 #Frame this data is associated with
 string frame_id
 """
-  __slots__ = ['header','Latitude','UTM_northing','Longtitude','UTM_easting','Altitude','Zone','Letter']
+  __slots__ = ['header','Latitude','Longitude','UTM_northing','UTM_easting','Altitude','Zone','Letter']
   _slot_types = ['std_msgs/Header','float64','float64','float64','float64','float64','int32','string']
 
   def __init__(self, *args, **kwds):
@@ -48,7 +49,7 @@ string frame_id
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       header,Latitude,UTM_northing,Longtitude,UTM_easting,Altitude,Zone,Letter
+       header,Latitude,Longitude,UTM_northing,UTM_easting,Altitude,Zone,Letter
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -61,10 +62,10 @@ string frame_id
         self.header = std_msgs.msg.Header()
       if self.Latitude is None:
         self.Latitude = 0.
+      if self.Longitude is None:
+        self.Longitude = 0.
       if self.UTM_northing is None:
         self.UTM_northing = 0.
-      if self.Longtitude is None:
-        self.Longtitude = 0.
       if self.UTM_easting is None:
         self.UTM_easting = 0.
       if self.Altitude is None:
@@ -76,8 +77,8 @@ string frame_id
     else:
       self.header = std_msgs.msg.Header()
       self.Latitude = 0.
+      self.Longitude = 0.
       self.UTM_northing = 0.
-      self.Longtitude = 0.
       self.UTM_easting = 0.
       self.Altitude = 0.
       self.Zone = 0
@@ -104,7 +105,7 @@ string frame_id
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
       _x = self
-      buff.write(_get_struct_5di().pack(_x.Latitude, _x.UTM_northing, _x.Longtitude, _x.UTM_easting, _x.Altitude, _x.Zone))
+      buff.write(_get_struct_5di().pack(_x.Latitude, _x.Longitude, _x.UTM_northing, _x.UTM_easting, _x.Altitude, _x.Zone))
       _x = self.Letter
       length = len(_x)
       if python3 or type(_x) == unicode:
@@ -141,7 +142,7 @@ string frame_id
       _x = self
       start = end
       end += 44
-      (_x.Latitude, _x.UTM_northing, _x.Longtitude, _x.UTM_easting, _x.Altitude, _x.Zone,) = _get_struct_5di().unpack(str[start:end])
+      (_x.Latitude, _x.Longitude, _x.UTM_northing, _x.UTM_easting, _x.Altitude, _x.Zone,) = _get_struct_5di().unpack(str[start:end])
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
@@ -172,7 +173,7 @@ string frame_id
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
       _x = self
-      buff.write(_get_struct_5di().pack(_x.Latitude, _x.UTM_northing, _x.Longtitude, _x.UTM_easting, _x.Altitude, _x.Zone))
+      buff.write(_get_struct_5di().pack(_x.Latitude, _x.Longitude, _x.UTM_northing, _x.UTM_easting, _x.Altitude, _x.Zone))
       _x = self.Letter
       length = len(_x)
       if python3 or type(_x) == unicode:
@@ -210,7 +211,7 @@ string frame_id
       _x = self
       start = end
       end += 44
-      (_x.Latitude, _x.UTM_northing, _x.Longtitude, _x.UTM_easting, _x.Altitude, _x.Zone,) = _get_struct_5di().unpack(str[start:end])
+      (_x.Latitude, _x.Longitude, _x.UTM_northing, _x.UTM_easting, _x.Altitude, _x.Zone,) = _get_struct_5di().unpack(str[start:end])
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])

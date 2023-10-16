@@ -10,7 +10,7 @@ from gps_driver.msg import gps_msg
 
 rospy.init_node('gps_node')
 
-def initialize_serial(port, baud_rate=4800, timeout_duration=3):
+def initialize_serial(port, baud_rate=4800 ,timeout_duration=3):
     try:
         return serial.Serial(port, baud_rate, timeout=timeout_duration)
     except Exception as e:
@@ -18,7 +18,7 @@ def initialize_serial(port, baud_rate=4800, timeout_duration=3):
         sys.exit(1)
 def parse_gps_data(line):
     elements = line.split(",")
-    if "$GPGGA" not in elements[0]:
+    if  "$GNGGA" not in elements[0]:
         return None
     if not elements[2] or not elements[4]:
         rospy.logwarn("Incomplete GPS data received: "+line)
@@ -38,21 +38,24 @@ def parse_gps_data(line):
     if elements[3] =='S':
         latitude*=-1
 
-    #Parsing longitude
-    raw_longitude = float(elements[4])
-    long_degree,long_minute = divmod(raw_longitude,100)
-    longitude = long_degree + long_minute/60
+    #Parsing longtitude
+    raw_longtitude = float(elements[4])
+    long_degree,long_minute = divmod(raw_longtitude,100)
+    longtitude = long_degree + long_minute/60
     if elements[5] =="W":
-        longitude*=-1
+        longtitude*=-1
 
     #Parsing Altitude
     altitude = float(elements[9])
-    return total_seconds,nsecs,latitude,longitude,altitude
+
+    rtk = int(elements[6]) if elements[6] else 0  # Assuming rtk is an integer. Adjust if it's a different type.
+
+    return total_seconds,nsecs,latitude,longtitude,altitude,rtk
 
 def gps_driver():
    print("Starting gps_driver function...")
-   port = rospy.get_param('~port', '/dev/pts/4')
-   baud_rate = rospy.get_param('~baudrate', 4800)
+   port = rospy.get_param('~port', '/dev/ttyACM0')
+   baud_rate = rospy.get_param('~baudrate',4800)
 
    gps_serial =initialize_serial(port,baud_rate)
    pub = rospy.Publisher('/gps', gps_msg, queue_size=10)
@@ -67,7 +70,8 @@ def gps_driver():
        
        msg = gps_msg()
        if parsed_data:
-           utc_secs,utc_nsecs,lat,lon,alt = parsed_data
+           utc_secs,utc_nsecs,lat,lon,alt,rtk = parsed_data
+           
            utm_data = utm.from_latlon(lat,lon)
 
            #update message fields
@@ -75,9 +79,10 @@ def gps_driver():
            msg.header.stamp.nsecs = int(utc_nsecs)
            msg.header.frame_id = 'GPS1_Frame'
            msg.Latitude = lat
-           msg.Longitude = lon
+           msg.Longtitude = lon
            msg.Altitude = alt
            msg.UTM_easting, msg.UTM_northing, msg.Zone, msg.Letter = utm_data
+           msg.rtk = rtk
            print("Received data:", gps_data)
            rospy.loginfo("Publishing GPS data: %s", msg)
            pub.publish(msg)
@@ -89,4 +94,5 @@ if __name__ == "__main__":
     try:
         gps_driver()
     except rospy.ROSInterruptException:
+
         rospy.logerr("Interrupted")

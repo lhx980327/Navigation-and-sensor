@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-   <arg name="port" default="/dev/ttyUSB0"/>
+   <arg name="port" default="/dev/pts/4"/>
    <arg name="baudrate" default="4800"/>
    
    <node name="gps_node" pkg="gps_driver" type="driver.py" output="screen" clear_params="true">

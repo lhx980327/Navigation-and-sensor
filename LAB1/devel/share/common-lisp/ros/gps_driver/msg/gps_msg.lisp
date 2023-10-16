@@ -17,14 +17,14 @@
     :initarg :Latitude
     :type cl:float
     :initform 0.0)
+   (Longitude
+    :reader Longitude
+    :initarg :Longitude
+    :type cl:float
+    :initform 0.0)
    (UTM_northing
     :reader UTM_northing
     :initarg :UTM_northing
-    :type cl:float
-    :initform 0.0)
-   (Longtitude
-    :reader Longtitude
-    :initarg :Longtitude
     :type cl:float
     :initform 0.0)
    (UTM_easting
@@ -67,15 +67,15 @@
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader gps_driver-msg:Latitude-val is deprecated.  Use gps_driver-msg:Latitude instead.")
   (Latitude m))
 
+(cl:ensure-generic-function 'Longitude-val :lambda-list '(m))
+(cl:defmethod Longitude-val ((m <gps_msg>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader gps_driver-msg:Longitude-val is deprecated.  Use gps_driver-msg:Longitude instead.")
+  (Longitude m))
+
 (cl:ensure-generic-function 'UTM_northing-val :lambda-list '(m))
 (cl:defmethod UTM_northing-val ((m <gps_msg>))
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader gps_driver-msg:UTM_northing-val is deprecated.  Use gps_driver-msg:UTM_northing instead.")
   (UTM_northing m))
-
-(cl:ensure-generic-function 'Longtitude-val :lambda-list '(m))
-(cl:defmethod Longtitude-val ((m <gps_msg>))
-  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader gps_driver-msg:Longtitude-val is deprecated.  Use gps_driver-msg:Longtitude instead.")
-  (Longtitude m))
 
 (cl:ensure-generic-function 'UTM_easting-val :lambda-list '(m))
 (cl:defmethod UTM_easting-val ((m <gps_msg>))
@@ -108,7 +108,7 @@
     (cl:write-byte (cl:ldb (cl:byte 8 40) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 48) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 56) bits) ostream))
-  (cl:let ((bits (roslisp-utils:encode-double-float-bits (cl:slot-value msg 'UTM_northing))))
+  (cl:let ((bits (roslisp-utils:encode-double-float-bits (cl:slot-value msg 'Longitude))))
     (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
@@ -117,7 +117,7 @@
     (cl:write-byte (cl:ldb (cl:byte 8 40) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 48) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 56) bits) ostream))
-  (cl:let ((bits (roslisp-utils:encode-double-float-bits (cl:slot-value msg 'Longtitude))))
+  (cl:let ((bits (roslisp-utils:encode-double-float-bits (cl:slot-value msg 'UTM_northing))))
     (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
@@ -179,7 +179,7 @@
       (cl:setf (cl:ldb (cl:byte 8 40) bits) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 48) bits) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 56) bits) (cl:read-byte istream))
-    (cl:setf (cl:slot-value msg 'UTM_northing) (roslisp-utils:decode-double-float-bits bits)))
+    (cl:setf (cl:slot-value msg 'Longitude) (roslisp-utils:decode-double-float-bits bits)))
     (cl:let ((bits 0))
       (cl:setf (cl:ldb (cl:byte 8 0) bits) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 8) bits) (cl:read-byte istream))
@@ -189,7 +189,7 @@
       (cl:setf (cl:ldb (cl:byte 8 40) bits) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 48) bits) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 56) bits) (cl:read-byte istream))
-    (cl:setf (cl:slot-value msg 'Longtitude) (roslisp-utils:decode-double-float-bits bits)))
+    (cl:setf (cl:slot-value msg 'UTM_northing) (roslisp-utils:decode-double-float-bits bits)))
     (cl:let ((bits 0))
       (cl:setf (cl:ldb (cl:byte 8 0) bits) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 8) bits) (cl:read-byte istream))
@@ -234,16 +234,16 @@
   "gps_driver/gps_msg")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<gps_msg>)))
   "Returns md5sum for a message object of type '<gps_msg>"
-  "979b0376980b7c970e855bf8b0d4cbc5")
+  "588c3c8e5e42db6a1883f51ef950f22a")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'gps_msg)))
   "Returns md5sum for a message object of type 'gps_msg"
-  "979b0376980b7c970e855bf8b0d4cbc5")
+  "588c3c8e5e42db6a1883f51ef950f22a")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<gps_msg>)))
   "Returns full string definition for message of type '<gps_msg>"
-  (cl:format cl:nil "Header header~%float64 Latitude~%float64 UTM_northing~%float64 Longtitude~%float64 UTM_easting~%float64 Altitude~%int32 Zone~%string Letter~%~%================================================================================~%MSG: std_msgs/Header~%# Standard metadata for higher-level stamped data types.~%# This is generally used to communicate timestamped data ~%# in a particular coordinate frame.~%# ~%# sequence ID: consecutively increasing ID ~%uint32 seq~%#Two-integer timestamp that is expressed as:~%# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')~%# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')~%# time-handling sugar is provided by the client library~%time stamp~%#Frame this data is associated with~%string frame_id~%~%~%"))
+  (cl:format cl:nil "Header header~%float64 Latitude~%float64 Longitude~%float64 UTM_northing~%float64 UTM_easting~%float64 Altitude~%int32 Zone~%string Letter~%~%~%================================================================================~%MSG: std_msgs/Header~%# Standard metadata for higher-level stamped data types.~%# This is generally used to communicate timestamped data ~%# in a particular coordinate frame.~%# ~%# sequence ID: consecutively increasing ID ~%uint32 seq~%#Two-integer timestamp that is expressed as:~%# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')~%# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')~%# time-handling sugar is provided by the client library~%time stamp~%#Frame this data is associated with~%string frame_id~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'gps_msg)))
   "Returns full string definition for message of type 'gps_msg"
-  (cl:format cl:nil "Header header~%float64 Latitude~%float64 UTM_northing~%float64 Longtitude~%float64 UTM_easting~%float64 Altitude~%int32 Zone~%string Letter~%~%================================================================================~%MSG: std_msgs/Header~%# Standard metadata for higher-level stamped data types.~%# This is generally used to communicate timestamped data ~%# in a particular coordinate frame.~%# ~%# sequence ID: consecutively increasing ID ~%uint32 seq~%#Two-integer timestamp that is expressed as:~%# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')~%# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')~%# time-handling sugar is provided by the client library~%time stamp~%#Frame this data is associated with~%string frame_id~%~%~%"))
+  (cl:format cl:nil "Header header~%float64 Latitude~%float64 Longitude~%float64 UTM_northing~%float64 UTM_easting~%float64 Altitude~%int32 Zone~%string Letter~%~%~%================================================================================~%MSG: std_msgs/Header~%# Standard metadata for higher-level stamped data types.~%# This is generally used to communicate timestamped data ~%# in a particular coordinate frame.~%# ~%# sequence ID: consecutively increasing ID ~%uint32 seq~%#Two-integer timestamp that is expressed as:~%# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')~%# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')~%# time-handling sugar is provided by the client library~%time stamp~%#Frame this data is associated with~%string frame_id~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <gps_msg>))
   (cl:+ 0
      (roslisp-msg-protocol:serialization-length (cl:slot-value msg 'header))
@@ -260,8 +260,8 @@
   (cl:list 'gps_msg
     (cl:cons ':header (header msg))
     (cl:cons ':Latitude (Latitude msg))
+    (cl:cons ':Longitude (Longitude msg))
     (cl:cons ':UTM_northing (UTM_northing msg))
-    (cl:cons ':Longtitude (Longtitude msg))
     (cl:cons ':UTM_easting (UTM_easting msg))
     (cl:cons ':Altitude (Altitude msg))
     (cl:cons ':Zone (Zone msg))

@@ -16,15 +16,15 @@
 
 (defclass gps_driver::gps_msg
   :super ros::object
-  :slots (_header _Latitude _UTM_northing _Longtitude _UTM_easting _Altitude _Zone _Letter ))
+  :slots (_header _Latitude _Longitude _UTM_northing _UTM_easting _Altitude _Zone _Letter ))
 
 (defmethod gps_driver::gps_msg
   (:init
    (&key
     ((:header __header) (instance std_msgs::Header :init))
     ((:Latitude __Latitude) 0.0)
+    ((:Longitude __Longitude) 0.0)
     ((:UTM_northing __UTM_northing) 0.0)
-    ((:Longtitude __Longtitude) 0.0)
     ((:UTM_easting __UTM_easting) 0.0)
     ((:Altitude __Altitude) 0.0)
     ((:Zone __Zone) 0)
@@ -33,8 +33,8 @@
    (send-super :init)
    (setq _header __header)
    (setq _Latitude (float __Latitude))
+   (setq _Longitude (float __Longitude))
    (setq _UTM_northing (float __UTM_northing))
-   (setq _Longtitude (float __Longtitude))
    (setq _UTM_easting (float __UTM_easting))
    (setq _Altitude (float __Altitude))
    (setq _Zone (round __Zone))
@@ -50,12 +50,12 @@
   (:Latitude
    (&optional __Latitude)
    (if __Latitude (setq _Latitude __Latitude)) _Latitude)
+  (:Longitude
+   (&optional __Longitude)
+   (if __Longitude (setq _Longitude __Longitude)) _Longitude)
   (:UTM_northing
    (&optional __UTM_northing)
    (if __UTM_northing (setq _UTM_northing __UTM_northing)) _UTM_northing)
-  (:Longtitude
-   (&optional __Longtitude)
-   (if __Longtitude (setq _Longtitude __Longtitude)) _Longtitude)
   (:UTM_easting
    (&optional __UTM_easting)
    (if __UTM_easting (setq _UTM_easting __UTM_easting)) _UTM_easting)
@@ -75,9 +75,9 @@
     (send _header :serialization-length)
     ;; float64 _Latitude
     8
-    ;; float64 _UTM_northing
+    ;; float64 _Longitude
     8
-    ;; float64 _Longtitude
+    ;; float64 _UTM_northing
     8
     ;; float64 _UTM_easting
     8
@@ -96,10 +96,10 @@
        (send _header :serialize s)
      ;; float64 _Latitude
        (sys::poke _Latitude (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
+     ;; float64 _Longitude
+       (sys::poke _Longitude (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;; float64 _UTM_northing
        (sys::poke _UTM_northing (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
-     ;; float64 _Longtitude
-       (sys::poke _Longtitude (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;; float64 _UTM_easting
        (sys::poke _UTM_easting (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;; float64 _Altitude
@@ -116,10 +116,10 @@
      (send _header :deserialize buf ptr-) (incf ptr- (send _header :serialization-length))
    ;; float64 _Latitude
      (setq _Latitude (sys::peek buf ptr- :double)) (incf ptr- 8)
+   ;; float64 _Longitude
+     (setq _Longitude (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;; float64 _UTM_northing
      (setq _UTM_northing (sys::peek buf ptr- :double)) (incf ptr- 8)
-   ;; float64 _Longtitude
-     (setq _Longtitude (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;; float64 _UTM_easting
      (setq _UTM_easting (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;; float64 _Altitude
@@ -132,17 +132,18 @@
    self)
   )
 
-(setf (get gps_driver::gps_msg :md5sum-) "979b0376980b7c970e855bf8b0d4cbc5")
+(setf (get gps_driver::gps_msg :md5sum-) "588c3c8e5e42db6a1883f51ef950f22a")
 (setf (get gps_driver::gps_msg :datatype-) "gps_driver/gps_msg")
 (setf (get gps_driver::gps_msg :definition-)
       "Header header
 float64 Latitude
+float64 Longitude
 float64 UTM_northing
-float64 Longtitude
 float64 UTM_easting
 float64 Altitude
 int32 Zone
 string Letter
+
 
 ================================================================================
 MSG: std_msgs/Header
@@ -164,6 +165,6 @@ string frame_id
 
 
 
-(provide :gps_driver/gps_msg "979b0376980b7c970e855bf8b0d4cbc5")
+(provide :gps_driver/gps_msg "588c3c8e5e42db6a1883f51ef950f22a")
 
 

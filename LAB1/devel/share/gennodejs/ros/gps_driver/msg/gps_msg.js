@@ -21,8 +21,8 @@ class gps_msg {
       // initObj === null is a special case for deserialization where we don't initialize fields
       this.header = null;
       this.Latitude = null;
+      this.Longitude = null;
       this.UTM_northing = null;
-      this.Longtitude = null;
       this.UTM_easting = null;
       this.Altitude = null;
       this.Zone = null;
@@ -41,17 +41,17 @@ class gps_msg {
       else {
         this.Latitude = 0.0;
       }
+      if (initObj.hasOwnProperty('Longitude')) {
+        this.Longitude = initObj.Longitude
+      }
+      else {
+        this.Longitude = 0.0;
+      }
       if (initObj.hasOwnProperty('UTM_northing')) {
         this.UTM_northing = initObj.UTM_northing
       }
       else {
         this.UTM_northing = 0.0;
-      }
-      if (initObj.hasOwnProperty('Longtitude')) {
-        this.Longtitude = initObj.Longtitude
-      }
-      else {
-        this.Longtitude = 0.0;
       }
       if (initObj.hasOwnProperty('UTM_easting')) {
         this.UTM_easting = initObj.UTM_easting
@@ -86,10 +86,10 @@ class gps_msg {
     bufferOffset = std_msgs.msg.Header.serialize(obj.header, buffer, bufferOffset);
     // Serialize message field [Latitude]
     bufferOffset = _serializer.float64(obj.Latitude, buffer, bufferOffset);
+    // Serialize message field [Longitude]
+    bufferOffset = _serializer.float64(obj.Longitude, buffer, bufferOffset);
     // Serialize message field [UTM_northing]
     bufferOffset = _serializer.float64(obj.UTM_northing, buffer, bufferOffset);
-    // Serialize message field [Longtitude]
-    bufferOffset = _serializer.float64(obj.Longtitude, buffer, bufferOffset);
     // Serialize message field [UTM_easting]
     bufferOffset = _serializer.float64(obj.UTM_easting, buffer, bufferOffset);
     // Serialize message field [Altitude]
@@ -109,10 +109,10 @@ class gps_msg {
     data.header = std_msgs.msg.Header.deserialize(buffer, bufferOffset);
     // Deserialize message field [Latitude]
     data.Latitude = _deserializer.float64(buffer, bufferOffset);
+    // Deserialize message field [Longitude]
+    data.Longitude = _deserializer.float64(buffer, bufferOffset);
     // Deserialize message field [UTM_northing]
     data.UTM_northing = _deserializer.float64(buffer, bufferOffset);
-    // Deserialize message field [Longtitude]
-    data.Longtitude = _deserializer.float64(buffer, bufferOffset);
     // Deserialize message field [UTM_easting]
     data.UTM_easting = _deserializer.float64(buffer, bufferOffset);
     // Deserialize message field [Altitude]
@@ -138,7 +138,7 @@ class gps_msg {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '979b0376980b7c970e855bf8b0d4cbc5';
+    return '588c3c8e5e42db6a1883f51ef950f22a';
   }
 
   static messageDefinition() {
@@ -146,12 +146,13 @@ class gps_msg {
     return `
     Header header
     float64 Latitude
+    float64 Longitude
     float64 UTM_northing
-    float64 Longtitude
     float64 UTM_easting
     float64 Altitude
     int32 Zone
     string Letter
+    
     
     ================================================================================
     MSG: std_msgs/Header
@@ -192,18 +193,18 @@ class gps_msg {
       resolved.Latitude = 0.0
     }
 
+    if (msg.Longitude !== undefined) {
+      resolved.Longitude = msg.Longitude;
+    }
+    else {
+      resolved.Longitude = 0.0
+    }
+
     if (msg.UTM_northing !== undefined) {
       resolved.UTM_northing = msg.UTM_northing;
     }
     else {
       resolved.UTM_northing = 0.0
-    }
-
-    if (msg.Longtitude !== undefined) {
-      resolved.Longtitude = msg.Longtitude;
-    }
-    else {
-      resolved.Longtitude = 0.0
     }
 
     if (msg.UTM_easting !== undefined) {

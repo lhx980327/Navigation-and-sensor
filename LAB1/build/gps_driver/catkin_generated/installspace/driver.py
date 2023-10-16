@@ -38,27 +38,22 @@ def parse_gps_data(line):
     if elements[3] =='S':
         latitude*=-1
 
-    #Parsing longtitude
-    raw_longtitude = float(elements[4])
-    long_degree,long_minute = divmod(raw_longtitude,100)
-    longtitude = long_degree + long_minute/60
+    #Parsing longitude
+    raw_longitude = float(elements[4])
+    long_degree,long_minute = divmod(raw_longitude,100)
+    longitude = long_degree + long_minute/60
     if elements[5] =="W":
-        longtitude*=-1
+        longitude*=-1
 
     #Parsing Altitude
     altitude = float(elements[9])
-    return total_seconds,nsecs,latitude,longtitude,altitude
+    return total_seconds,nsecs,latitude,longitude,altitude
 
 def gps_driver():
    print("Starting gps_driver function...")
-   arguments = rospy.myargv(argv = sys.argv)
+   port = rospy.get_param('~port', '/dev/pts/4')
+   baud_rate = rospy.get_param('~baudrate', 4800)
 
-   if len(arguments)<2:
-       rospy.logerr("Invalid entry!")
-       sys.exit(1)
-    
-   port = rospy.get_param('~port',arguments[1])
-   baud_rate = rospy.get_param('~baudrate',4800)
    gps_serial =initialize_serial(port,baud_rate)
    pub = rospy.Publisher('/gps', gps_msg, queue_size=10)
 
@@ -80,7 +75,7 @@ def gps_driver():
            msg.header.stamp.nsecs = int(utc_nsecs)
            msg.header.frame_id = 'GPS1_Frame'
            msg.Latitude = lat
-           msg.Longtitude = lon
+           msg.Longitude = lon
            msg.Altitude = alt
            msg.UTM_easting, msg.UTM_northing, msg.Zone, msg.Letter = utm_data
            print("Received data:", gps_data)

@@ -3,10 +3,10 @@
           HEADER
           LATITUDE-VAL
           LATITUDE
+          LONGITUDE-VAL
+          LONGITUDE
           UTM_NORTHING-VAL
           UTM_NORTHING
-          LONGTITUDE-VAL
-          LONGTITUDE
           UTM_EASTING-VAL
           UTM_EASTING
           ALTITUDE-VAL
