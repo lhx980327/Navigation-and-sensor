@@ -51,7 +51,7 @@ def parse_gps_data(line):
 
 def gps_driver():
    print("Starting gps_driver function...")
-   port = rospy.get_param('~port', '/dev/pts/4')
+   port = rospy.get_param('~port', '/dev/pts/6')
    baud_rate = rospy.get_param('~baudrate', 4800)
 
    gps_serial =initialize_serial(port,baud_rate)
