@@ -29,21 +29,21 @@ def parse_gps_data(line):
     hours,remainder= divmod(utc_time,10000)
     minutes,seconds = divmod(remainder,100)
     total_seconds = hours* 3600+ minutes*60+seconds
-    nsecs = int((total_seconds * (10**9)) % (10**9))
+    nsecs = round((total_seconds * (10**9)) % (10**9))
 
     #Parsing Latitude
     raw_latitude = float(elements[2])
     lat_degree, lat_minute =divmod(raw_latitude,100)
-    latitude = lat_degree +lat_minute/60
-    if elements[3] =='S':
-        latitude*=-1
+    latitude = round(lat_degree + lat_minute/60, 9)
+    if elements[3] == 'S':
+        latitude *= -1
 
     #Parsing longitude
     raw_longitude = float(elements[4])
     long_degree,long_minute = divmod(raw_longitude,100)
-    longitude = long_degree + long_minute/60
-    if elements[5] =="W":
-        longitude*=-1
+    longitude = round(long_degree + long_minute/60, 9)
+    if elements[5] == "W":
+        longitude *= -1
 
     #Parsing Altitude
     altitude = float(elements[9])
@@ -67,20 +67,27 @@ def gps_driver():
        
        msg = gps_msg()
        if parsed_data:
-           utc_secs,utc_nsecs,lat,lon,alt = parsed_data
-           utm_data = utm.from_latlon(lat,lon)
+        utc_secs, utc_nsecs, lat, lon, alt = parsed_data
+        utm_data = utm.from_latlon(lat, lon)
 
-           #update message fields
-           msg.header.stamp.secs = int(utc_secs)
-           msg.header.stamp.nsecs = int(utc_nsecs)
-           msg.header.frame_id = 'GPS1_Frame'
-           msg.Latitude = lat
-           msg.Longitude = lon
-           msg.Altitude = alt
-           msg.UTM_easting, msg.UTM_northing, msg.Zone, msg.Letter = utm_data
-           print("Received data:", gps_data)
-           rospy.loginfo("Publishing GPS data: %s", msg)
-           pub.publish(msg)
+        # Rounding off Easting and Northing for better precision
+        utm_easting = round(utm_data[0], 10)
+        utm_northing = round(utm_data[1], 10)
+
+        # update message fields
+        msg.header.stamp.secs = int(utc_secs)
+        msg.header.stamp.nsecs = int(utc_nsecs)
+        msg.header.frame_id = 'GPS1_Frame'
+        msg.Latitude = lat
+        msg.Longitude = lon
+        msg.Altitude = alt
+        msg.UTM_easting = utm_easting
+        msg.UTM_northing = utm_northing
+        msg.Zone, msg.Letter = utm_data[2], utm_data[3]
+
+        print("Received data:", gps_data)
+        rospy.loginfo("Publishing GPS data: %s", msg)
+        pub.publish(msg)
 
            
 
